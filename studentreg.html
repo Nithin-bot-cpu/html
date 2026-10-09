@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML5 Forms and Multimedia</title>
+</head>
+<body>
+
+  
+    <!-- 1. STUDENT REGISTRATION FORM -->
+    
+
+    <h2>1. Student Registration Form</h2>
+
+    <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password"
+               name="password" required>
+        <br><br>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+        <br><br>
+
+        <label>Gender:</label>
+        <input type="radio" name="gender"
+               value="Male" required> Male
+        <input type="radio" name="gender"
+               value="Female"> Female
+        <input type="radio" name="gender"
+               value="Other"> Other
+        <br><br>
+
+        <label for="department">Department:</label>
+        <select id="department" name="department" required>
+            <option value="">Select Department</option>
+            <option value="CSE">CSE</option>
+            <option value="IT">IT</option>
+            <option value="ECE">ECE</option>
+            <option value="EEE">EEE</option>
+        </select>
+        <br><br>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required>
+        <br><br>
+
+        <label for="address">Address:</label>
+        <textarea id="address" name="address"
+                  rows="4" cols="30" required></textarea>
+        <br><br>
+
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+
+
+    <!-- 2. ONLINE COURSE REGISTRATION FORM -->
+    
+
+    <h2>2. Online Course Registration Form</h2>
+
+    <form>
+        <label for="cname">Student Name:</label>
+        <input type="text" id="cname" name="name" required>
+        <br><br>
+
+        <label for="cemail">Email:</label>
+        <input type="email" id="cemail" name="email" required>
+        <br><br>
+
+        <label for="qualification">Qualification:</label>
+        <input type="text" id="qualification"
+               name="qualification" required>
+        <br><br>
+
+        <label for="course">Select Course:</label>
+        <select id="course" name="course" required>
+            <option value="">Choose a course</option>
+            <option value="HTML">HTML</option>
+            <option value="CSS">CSS</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="Python">Python</option>
+        </select>
+        <br><br>
+
+        <label>Learning Mode:</label>
+        <input type="radio" name="mode"
+               value="Online" required> Online
+        <input type="radio" name="mode"
+               value="Offline"> Offline
+        <br><br>
+
+        <input type="submit" value="Register">
+    </form>
+
+
+   
+    <!-- 3. VIDEO EMBEDDING -->
+    
+
+    <h2>3. Course Video</h2>
+
+    <video width="640" height="360"
+           controls
+           poster="poster.jpg">
+
+        <source src="course.mp4" type="video/mp4">
+
+        Your browser does not support the video element.
+        Please update your browser.
+    </video>
+
+
+    <!-- 4. AUDIO EMBEDDING -->
+   
+    <h2>4. Music / Podcast</h2>
+
+    <audio controls>
+        <source src="podcast.mp3" type="audio/mpeg">
+
+        Your browser does not support the audio element.
+        Please use a modern browser.
+    </audio>
+
+
+    
+    <!-- 5. OBJECT EMBEDDING - PDF -->
+   
+    <h2>5. College Information PDF</h2>
+
+    <object data="college-info.pdf"
+            type="application/pdf"
+            width="600"
+            height="400">
+
+        Your browser cannot display the PDF.
+
+        <a href="college-info.pdf">
+            Click here to open the College Information PDF
+        </a>
+
+    </object>
+
+</body>
+</html>
