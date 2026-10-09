@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three CSS Methods</title>
+
+    <!-- Internal CSS -->
+    <style>
+        .internal {
+            background-color: lightblue;
+            color: darkblue;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>CSS Styling Methods</h1>
+
+    <!-- i) Inline CSS -->
+    <section style="background-color: lightyellow;
+                    color: brown;
+                    padding: 20px;
+                    text-align: center;">
+        <h2>Inline CSS</h2>
+        <p>CSS is applied directly using the style attribute.</p>
+    </section>
+
+    <br>
+
+    <!-- ii) Internal CSS -->
+    <section class="internal">
+        <h2>Internal CSS</h2>
+        <p>CSS is written inside the style tag in the head.</p>
+    </section>
+
+    <br>
+
+    <!-- iii) External CSS -->
+    <section class="external">
+        <h2>External CSS</h2>
+        <p>CSS is written in a separate CSS file.</p>
+    </section>
+
+</body>
+</html>
