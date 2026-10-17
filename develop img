@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Logo - Website Template</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header and navigation -->
+  <header class="hero" id="home">
+    <nav class="navbar container">
+      <a href="#home" class="logo">YOUR <span>logo</span></a>
+
+      <button class="menu-toggle" aria-label="Toggle navigation">☰</button>
+
+      <ul class="nav-links">
+        <li><a href="#home">Pages</a></li>
+        <li><a href="#features">Feature</a></li>
+        <li><a href="#team">Services</a></li>
+        <li><a href="#layouts">Blog</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <section class="hero-content container">
+      <button class="arrow" id="previous" aria-label="Previous slide">❮</button>
+
+      <div class="monitor">
+        <div class="monitor-screen">
+          YOUR <span>logo</span>
+        </div>
+        <div class="monitor-stand"></div>
+        <div class="monitor-foot"></div>
+      </div>
+
+      <div class="hero-text">
+        <h2>AWESOME</h2>
+        <h1>WEBSITE<br>TEMPLATE</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+      </div>
+
+      <button class="arrow" id="next" aria-label="Next slide">❯</button>
+    </section>
+  </header>
+
+  <!-- Main heading -->
+  <section class="headline">
+    <h2>Create Your Own Genuine Web Masterpiece</h2>
+    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+  </section>
+
+  <!-- Features -->
+  <section class="features container" id="features">
+    <article class="feature">
+      <div class="icon">⌕</div>
+      <h3>Research</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </article>
+
+    <article class="feature featured">
+      <div class="icon">▣</div>
+      <h3>Fully Customizable</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </article>
+
+    <article class="feature">
+      <div class="icon">▰</div>
+      <h3>Coordination</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </article>
+
+    <article class="feature">
+      <div class="icon">⚙</div>
+      <h3>Test</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </article>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="portfolio">
+    <div class="container">
+      <h2>Let Them Know Why You're the Best</h2>
+      <p class="subtitle">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      </p>
+
+      <div class="portfolio-grid">
+        <div class="portfolio-item"></div>
+        <div class="portfolio-item selected">＋</div>
+        <div class="portfolio-item"></div>
+        <div class="portfolio-item"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team members -->
+  <section class="team container" id="team">
+    <article class="person">
+      <div class="avatar"><span>⚙</span></div>
+      <h3>Dexter Gilbert</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </article>
+
+    <article class="person">
+      <div class="avatar"><span>▣</span></div>
+      <h3>Mary Collier</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </article>
+
+    <article class="person">
+      <div class="avatar secretary">Secretary</div>
+      <h3>Stefan Morrison</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </article>
+
+    <article class="person">
+      <div class="avatar"><span>✎</span></div>
+      <h3>Bill Smith</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </article>
+  </section>
+
+  <!-- Video promotion -->
+  <section class="video-section">
+    <div class="video-content container">
+      <button class="video-box" id="play-video" aria-label="Play video">
+        ▶
+      </button>
+
+      <div>
+        <h2>What Are You Waiting For?<br>Start It Today!</h2>
+        <p>
+          Lorem Ipsum passages, and more recently with desktop publishing
+          software like Aldus PageMaker including versions of Lorem Ipsum.
+        </p>
+        <a href="#contact" class="button">FIND OUT MORE</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners -->
+  <section class="layouts container" id="layouts">
+    <div>
+      <h2>Beautiful Layouts</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Ut wisi enim ad minim veniam, quis nostrud exerci tation
+        ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+      </p>
+    </div>
+
+    <div class="partners">
+      <div>PARTNER'S<strong>LOGO</strong></div>
+      <div>PARTNER'S<strong>LOGO</strong></div>
+      <div>PARTNER'S<strong>LOGO</strong></div>
+      <div>PARTNER'S<strong>LOGO</strong></div>
+      <div>PARTNER'S<strong>LOGO</strong></div>
+      <div>PARTNER'S<strong>LOGO</strong></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-content container">
+      <div>
+        <h3>About us</h3>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Integer nec odio. Praesent libero.
+        </p>
+      </div>
+
+      <div>
+        <h3>Get in Touch</h3>
+        <p>Address: 66 South Street, Window 6</p>
+        <p>Phone: +440 853769208</p>
+        <p>Email: freepik@example.com</p>
+      </div>
+
+      <div>
+        <h3>Social Media</h3>
+        <p>Follow us on social media.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Google">g+</a>
+          <a href="#" aria-label="Twitter">♥</a>
+          <a href="#" aria-label="Instagram">◎</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="copyright">Copyright © Freepik</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
