@@ -1,0 +1,728 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript DOM Practice</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: darkblue;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .box {
+            background-color: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px gray;
+        }
+
+        input, select {
+            width: 95%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkblue;
+        }
+
+        #result {
+            background-color: lightyellow;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .product {
+            background-color: lightblue;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .selected {
+            background-color: orange !important;
+            color: white;
+        }
+
+        #productResult {
+            background-color: lightyellow;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>JavaScript DOM Practice</h1>
+
+<div class="container">
+
+    <!-- QUESTION 1 -->
+
+    <div class="box">
+
+        <h2>Question 1: Student Registration</h2>
+
+        <form id="studentForm">
+
+            <label>Student Name</label>
+            <input type="text"
+                   id="studentName"
+                   class="studentInput"
+                   placeholder="Enter student name">
+
+            <label>Email</label>
+            <input type="email"
+                   id="email"
+                   class="studentInput"
+                   placeholder="Enter email">
+
+            <label>Department</label>
+
+            <select id="department" class="studentInput">
+                <option value="">Select Department</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Mechanical">Mechanical</option>
+            </select>
+
+            <button type="submit">Register</button>
+
+        </form>
+
+        <h3>Live Student Name:</h3>
+        <p id="liveName">Your name will appear here</p>
+
+        <h3>Selected Department:</h3>
+        <p id="selectedDepartment">No department selected</p>
+
+        <div id="result">
+            <h3>Student Details</h3>
+            <p>No student registered yet.</p>
+        </div>
+
+    </div>
+
+
+    <!-- QUESTION 2 -->
+
+    <div class="box">
+
+        <h2>Question 2: Product Management</h2>
+
+        <h3>Product List</h3>
+
+        <div id="productContainer">
+
+            <p class="product">Laptop</p>
+            <p class="product">Mobile</p>
+            <p class="product">Keyboard</p>
+            <p class="product">Mouse</p>
+
+        </div>
+
+        <p id="productResult">Total Products: 4</p>
+
+        <hr>
+
+        <h3>Add New Product</h3>
+
+        <input type="text"
+               id="newProduct"
+               placeholder="Enter product name">
+
+        <button type="button" onclick="addProduct()">
+            Add At End
+        </button>
+
+        <button type="button" onclick="addAtBeginning()">
+            Add At Beginning
+        </button>
+
+        <hr>
+
+        <h3>Update Product</h3>
+
+        <input type="text"
+               id="updateProduct"
+               placeholder="Enter new product name">
+
+        <button type="button" onclick="updateProduct()">
+            Update Selected Product
+        </button>
+
+        <button type="button" onclick="deleteSelected()">
+            Delete Selected Product
+        </button>
+
+        <hr>
+
+        <h3>Navigate Products</h3>
+
+        <button type="button" onclick="previousProduct()">
+            Previous
+        </button>
+
+        <button type="button" onclick="nextProduct()">
+            Next
+        </button>
+
+        <button type="button" onclick="firstProduct()">
+            First Product
+        </button>
+
+        <button type="button" onclick="lastProduct()">
+            Last Product
+        </button>
+
+        <p id="navigationResult"></p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+// =====================================
+// QUESTION 1: STUDENT REGISTRATION
+// =====================================
+
+
+// 1. getElementById() to get student name
+
+let nameInput = document.getElementById("studentName");
+
+
+// 2. querySelector() to get email
+
+let emailInput = document.querySelector("#email");
+
+
+// 3. querySelectorAll() to select all input fields
+
+let allInputs = document.querySelectorAll(".studentInput");
+
+console.log("All Input Fields:", allInputs);
+
+
+// 4. getElementsByClassName()
+
+let studentFields = document.getElementsByClassName("studentInput");
+
+console.log("Student Fields:", studentFields);
+
+
+// 5. Focus event to change input border color
+
+for (let field of studentFields) {
+
+    field.addEventListener("focus", function() {
+        this.style.border = "2px solid blue";
+    });
+
+    field.addEventListener("blur", function() {
+        this.style.border = "1px solid gray";
+    });
+
+}
+
+
+// 6. Input event to display student name immediately
+
+nameInput.addEventListener("input", function() {
+
+    document.getElementById("liveName").innerText =
+        nameInput.value;
+
+});
+
+
+// 7. Change event to display selected department
+
+let department = document.getElementById("department");
+
+department.addEventListener("change", function() {
+
+    document.getElementById("selectedDepartment").innerText =
+        department.value;
+
+});
+
+
+// 8. Submit event to validate form
+
+let form = document.getElementById("studentForm");
+
+form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    let studentName = nameInput.value.trim();
+    let email = emailInput.value.trim();
+    let dept = department.value;
+
+    if (studentName === "" || email === "" || dept === "") {
+
+        alert("Please fill all the fields");
+
+        return;
+
+    }
+
+    // 9. innerHTML to display student details
+
+    let result = document.getElementById("result");
+
+    result.innerHTML = `
+        <h3>Registration Successful!</h3>
+        <p>Student Name: ${studentName}</p>
+        <p>Email: ${email}</p>
+        <p>Department: ${dept}</p>
+    `;
+
+
+    // 10. Style to change background color
+
+    result.style.backgroundColor = "lightgreen";
+
+});
+
+
+// 11. addEventListener() to attach multiple events
+// to the same input
+
+nameInput.addEventListener("input", function() {
+
+    console.log("Name is being entered");
+
+});
+
+nameInput.addEventListener("focus", function() {
+
+    console.log("Name input is focused");
+
+});
+
+
+// =====================================
+// QUESTION 2: PRODUCT MANAGEMENT
+// =====================================
+
+
+// 1. getElementById() to select container
+
+let productContainer =
+    document.getElementById("productContainer");
+
+
+// 2. getElementsByTagName()
+
+let products =
+    productContainer.getElementsByTagName("p");
+
+console.log("All Products:", products);
+
+
+// 3. querySelectorAll()
+
+let allProducts =
+    productContainer.querySelectorAll(".product");
+
+console.log("Product Items:", allProducts);
+
+
+// Selected product variable
+
+let selected = null;
+
+
+// 4. Click event to select a product
+
+function attachEvents(product) {
+
+    product.addEventListener("click", function() {
+
+        // Remove previous selection
+
+        let items = productContainer.querySelectorAll(".product");
+
+        items.forEach(function(item) {
+            item.classList.remove("selected");
+        });
+
+        // Select current product
+
+        product.classList.add("selected");
+
+        selected = product;
+
+        document.getElementById("navigationResult").innerText =
+            "Selected Product: " + product.innerText;
+
+    });
+
+
+    // 5. Double click to delete product
+
+    product.addEventListener("dblclick", function() {
+
+        if (selected === product) {
+            selected = null;
+        }
+
+        product.remove();
+
+        updateCount();
+
+    });
+
+
+    // 6. Mouseover event
+
+    product.addEventListener("mouseover", function() {
+
+        this.style.color = "red";
+
+    });
+
+
+    // 7. Mouseout event
+
+    product.addEventListener("mouseout", function() {
+
+        this.style.color = "black";
+
+    });
+
+}
+
+
+// Attach events to existing products
+
+function attachAllEvents() {
+
+    let items = productContainer.querySelectorAll(".product");
+
+    items.forEach(function(product) {
+        attachEvents(product);
+    });
+
+}
+
+attachAllEvents();
+
+
+// 8. createElement(), append() and appendChild()
+
+function addProduct() {
+
+    let value = document.getElementById("newProduct").value.trim();
+
+    if (value === "") {
+        alert("Enter product name");
+        return;
+    }
+
+    let newItem = document.createElement("p");
+
+    newItem.className = "product";
+
+    newItem.textContent = value;
+
+    // append() to add product at the end
+
+    productContainer.append(newItem);
+
+    attachEvents(newItem);
+
+    document.getElementById("newProduct").value = "";
+
+    updateCount();
+
+}
+
+
+// 9. prepend() to add product at beginning
+
+function addAtBeginning() {
+
+    let value = document.getElementById("newProduct").value.trim();
+
+    if (value === "") {
+        alert("Enter product name");
+        return;
+    }
+
+    let newItem = document.createElement("p");
+
+    newItem.className = "product";
+
+    newItem.innerText = value;
+
+    // prepend() to add at beginning
+
+    productContainer.prepend(newItem);
+
+    attachEvents(newItem);
+
+    document.getElementById("newProduct").value = "";
+
+    updateCount();
+
+}
+
+
+// 10. appendChild() example
+
+// This function can also add a product at the end
+
+function addUsingAppendChild(value) {
+
+    let newItem = document.createElement("p");
+
+    newItem.className = "product";
+
+    newItem.textContent = value;
+
+    productContainer.appendChild(newItem);
+
+    attachEvents(newItem);
+
+    updateCount();
+
+}
+
+
+// 11. textContent and innerText to update product
+
+function updateProduct() {
+
+    let value = document.getElementById("updateProduct").value.trim();
+
+    if (selected === null) {
+
+        alert("Please select a product first");
+
+        return;
+
+    }
+
+    if (value === "") {
+
+        alert("Enter new product name");
+
+        return;
+
+    }
+
+    // textContent to update product name
+
+    selected.textContent = value;
+
+    // innerText example
+
+    document.getElementById("navigationResult").innerText =
+        "Product updated: " + selected.innerText;
+
+    document.getElementById("updateProduct").value = "";
+
+}
+
+
+// 12. Delete selected product
+
+function deleteSelected() {
+
+    if (selected === null) {
+
+        alert("Please select a product first");
+
+        return;
+
+    }
+
+    selected.remove();
+
+    selected = null;
+
+    updateCount();
+
+}
+
+
+// 13. previousElementSibling and nextElementSibling
+
+function previousProduct() {
+
+    if (selected === null) {
+        alert("Select a product first");
+        return;
+    }
+
+    let previous = selected.previousElementSibling;
+
+    if (previous !== null) {
+
+        selected.classList.remove("selected");
+
+        selected = previous;
+
+        selected.classList.add("selected");
+
+        showSelected();
+
+    }
+
+}
+
+
+function nextProduct() {
+
+    if (selected === null) {
+        alert("Select a product first");
+        return;
+    }
+
+    let next = selected.nextElementSibling;
+
+    if (next !== null) {
+
+        selected.classList.remove("selected");
+
+        selected = next;
+
+        selected.classList.add("selected");
+
+        showSelected();
+
+    }
+
+}
+
+
+// 14. firstElementChild and lastElementChild
+
+function firstProduct() {
+
+    let first = productContainer.firstElementChild;
+
+    if (first !== null) {
+
+        selectProduct(first);
+
+    }
+
+}
+
+
+function lastProduct() {
+
+    let last = productContainer.lastElementChild;
+
+    if (last !== null) {
+
+        selectProduct(last);
+
+    }
+
+}
+
+
+// Helper function to select product
+
+function selectProduct(product) {
+
+    if (selected !== null) {
+        selected.classList.remove("selected");
+    }
+
+    selected = product;
+
+    selected.classList.add("selected");
+
+    showSelected();
+
+}
+
+
+// 15. children[0] and other indexes
+
+function showSelected() {
+
+    let items = productContainer.children;
+
+    let index = Array.from(items).indexOf(selected);
+
+    document.getElementById("navigationResult").innerText =
+        "Selected: " + selected.innerText +
+        " | Position: " + (index + 1);
+
+    console.log("First Product:", items[0]);
+
+    console.log("All Products:", items);
+
+}
+
+
+// 16. parentElement to access product container
+
+function showParent(product) {
+
+    let parent = product.parentElement;
+
+    console.log("Product Container:", parent);
+
+}
+
+
+// innerHTML to display total product count
+
+function updateCount() {
+
+    let total = productContainer.children.length;
+
+    document.getElementById("productResult").innerHTML =
+        "Total Products: " + total;
+
+    // Display parentElement example
+
+    if (selected !== null && !productContainer.contains(selected)) {
+        selected = null;
+    }
+
+}
+
+updateCount();
+
+</script>
+
+</body>
+</html>
