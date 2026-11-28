@@ -1,0 +1,1236 @@
+import React, { useState, useEffect } from 'react';
+import {
+  ThemeProvider,
+  createTheme,
+  CssBaseline,
+  IconButton,
+  Badge,
+  Drawer,
+  Snackbar,
+  Alert,
+  Button,
+  Dialog,
+  DialogContent,
+  TextField,
+  InputAdornment,
+  Divider,
+} from '@mui/material';
+import {
+  SearchOutlined,
+  ShoppingBagOutlined,
+  CloseOutlined,
+  AddOutlined,
+  RemoveOutlined,
+  DeleteOutline,
+  CheckCircleOutline,
+} from '@mui/icons-material';
+
+// Custom MUI Theme matching the retro-editorial Boxing Day aesthetic
+const coolClothesTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#02733E', // Deep forest green
+    },
+    secondary: {
+      main: '#0047AB', // Royal blue
+    },
+    background: {
+      default: '#F43504', // Vibrant vermilion orange-red
+      paper: '#FDF5EE',
+    },
+    text: {
+      primary: '#FDF5EE',
+      secondary: '#1A1A1A',
+    },
+  },
+  typography: {
+    fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'uppercase',
+          borderRadius: 0,
+        },
+      },
+    },
+  },
+});
+
+// Royal Blue wavy/pinched "New" sticker badge (Upper Left)
+const NewStickerBadge = () => (
+  <div
+    className="relative inline-flex items-center justify-center select-none transition-transform duration-300 hover:rotate-[-4deg] hover:scale-105 cursor-pointer"
+    style={{ width: 64, height: 42 }}
+    title="New Boxing Day Collection"
+  >
+    <svg
+      viewBox="0 0 120 78"
+      className="w-full h-full drop-shadow-[0_2px_4px_rgba(0,0,0,0.18)]"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Pinched/curved-edge rectangular sticker path */}
+      <path
+        d="M6 6 C35 11, 85 11, 114 6 C110 26, 110 52, 114 72 C85 67, 35 67, 6 72 C10 52, 10 26, 6 6 Z"
+        fill="#0047AB"
+        stroke="#062B66"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+      />
+      <text
+        x="60"
+        y="48"
+        textAnchor="middle"
+        fill="#7EB6FF"
+        style={{
+          fontFamily: '"Great Vibes", cursive',
+          fontSize: '33px',
+          letterSpacing: '0.5px',
+        }}
+      >
+        New
+      </text>
+    </svg>
+  </div>
+);
+
+// Retro Yellow Smiley Face Sticker (Upper Right)
+const RetroSmileySticker = () => (
+  <div
+    className="relative inline-flex items-center justify-center select-none transition-transform duration-300 hover:rotate-12 hover:scale-105 cursor-pointer"
+    style={{ width: 60, height: 60 }}
+    title="Good Vibes Only!"
+  >
+    <svg
+      viewBox="0 0 100 100"
+      className="w-full h-full drop-shadow-[0_2px_5px_rgba(0,0,0,0.18)]"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Outer yellow circle */}
+      <circle
+        cx="50"
+        cy="50"
+        r="45"
+        fill="#FFD600"
+        stroke="#1C1917"
+        strokeWidth="2.2"
+      />
+      {/* Left retro oval eye */}
+      <ellipse
+        cx="35"
+        cy="39"
+        rx="4.8"
+        ry="10.5"
+        fill="#FFFFFF"
+        stroke="#1C1917"
+        strokeWidth="2"
+      />
+      <ellipse cx="33.5" cy="40" rx="2.6" ry="5.5" fill="#1C1917" />
+      {/* Right retro oval eye */}
+      <ellipse
+        cx="54"
+        cy="38"
+        rx="5.2"
+        ry="11"
+        fill="#FFFFFF"
+        stroke="#1C1917"
+        strokeWidth="2"
+      />
+      <ellipse cx="52.5" cy="39" rx="2.8" ry="5.8" fill="#1C1917" />
+      {/* Stylized retro nose hook */}
+      <path
+        d="M42 46 C36 53, 37 59, 44 59"
+        stroke="#1C1917"
+        strokeWidth="2.3"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Playful smirk mouth with cheek crease */}
+      <path
+        d="M27 64 C36 74, 56 75, 68 62"
+        stroke="#1C1917"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Left smirk dimple */}
+      <path
+        d="M24 61 C27 62, 29 65, 27 68"
+        stroke="#1C1917"
+        strokeWidth="2"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Right smirk dimple */}
+      <path
+        d="M65 59 C68 60, 70 63, 69 66"
+        stroke="#1C1917"
+        strokeWidth="2"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Subtle chin line */}
+      <path
+        d="M44 77 C48 79, 53 78, 56 76"
+        stroke="#1C1917"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        fill="none"
+      />
+    </svg>
+  </div>
+);
+
+// Bottom-right Cream Speech Bubble "SALE" Sticker
+const SaleSpeechBubble = ({ onClick }) => (
+  <button
+    onClick={onClick}
+    className="group relative inline-flex items-center justify-center bg-transparent border-0 p-0 cursor-pointer select-none transition-transform duration-300 hover:scale-105 hover:-rotate-2 focus:outline-none"
+    style={{ width: 92, height: 64 }}
+    aria-label="Special Boxing Day Sale"
+  >
+    <svg
+      viewBox="0 0 150 105"
+      className="w-full h-full drop-shadow-[0_3px_6px_rgba(0,0,0,0.16)]"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Speech bubble outline */}
+      <path
+        d="M82 10 C118 10, 142 26, 142 48 C142 70, 118 86, 82 86 C65 86, 49 82, 38 76 L14 91 L23 66 C16 60, 13 54, 13 48 C13 26, 44 10, 82 10 Z"
+        fill="#FDF5EE"
+        stroke="#1C1917"
+        strokeWidth="2.8"
+        strokeLinejoin="round"
+      />
+      {/* Hand-lettered funky SALE typography matching the sticker */}
+      <g
+        stroke="#02733E"
+        strokeWidth="5.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      >
+        {/* S */}
+        <path d="M48 36 C38 33, 33 41, 42 46 C51 50, 46 61, 33 58" />
+        {/* A */}
+        <path d="M56 59 L66 34 L74 59 M58 50 L72 50" />
+        {/* L */}
+        <path d="M84 34 L82 58 L97 57" />
+        {/* E */}
+        <path d="M119 35 L105 36 L104 58 L119 57 M104 47 L115 46" />
+      </g>
+    </svg>
+  </button>
+);
+
+// Custom Editorial Cutout Illustrations / Styled Product Visuals inside the Green Ovals
+// Designed so each product visually pops and overflows outside the forest-green oval just like the template!
+const CoolOutfitVisual = () => (
+  <div className="relative w-full h-full flex items-center justify-center">
+    {/* High-fashion editorial model seated pose overflowing the top & bottom-left of the green oval */}
+    <img
+      src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=640&q=85"
+      alt="Cool Outfit - Streetwear Cargo & Black Top"
+      className="w-[215px] h-[235px] object-cover object-top rounded-[44%] transition-transform duration-500 group-hover:scale-105"
+      style={{
+        clipPath: 'ellipse(47% 49% at 50% 48%)',
+        filter: 'contrast(1.06) saturate(1.05)',
+      }}
+    />
+    {/* Crisp studio framing ring accent so subject integrates seamlessly with the oval */}
+    <div
+      className="pointer-events-none absolute inset-0 rounded-[50%]"
+      style={{
+        boxShadow: 'inset 0 0 18px rgba(2, 115, 62, 0.35)',
+      }}
+    />
+  </div>
+);
+
+const AllWhiteBootsVisual = () => (
+  <div className="relative w-full h-full flex items-center justify-center">
+    {/* Bespoke crisp studio illustration + photorealistic white block-heel ankle boot angled diagonally */}
+    <svg
+      viewBox="0 0 320 240"
+      className="w-[275px] h-[215px] overflow-visible transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-2 drop-shadow-[0_14px_18px_rgba(0,0,0,0.28)]"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="bootLeather" x1="70" y1="30" x2="250" y2="175" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="55%" stopColor="#F6F6F8" />
+          <stop offset="100%" stopColor="#E4E4E9" />
+        </linearGradient>
+        <linearGradient id="bootShade" x1="110" y1="90" x2="185" y2="155" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#EAEAEF" stopOpacity="0.1" />
+          <stop offset="100%" stopColor="#CFCFD8" stopOpacity="0.65" />
+        </linearGradient>
+        <linearGradient id="heelSide" x1="90" y1="145" x2="135" y2="205" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#F2F2F5" />
+          <stop offset="100%" stopColor="#D7D7E0" />
+        </linearGradient>
+      </defs>
+
+      <g transform="rotate(-17 160 120)">
+        {/* Dark sole & heel tip */}
+        <path
+          d="M84 195 L122 195 L120 202 L83 202 Z"
+          fill="#1D1D1F"
+        />
+        <path
+          d="M142 156 C175 162, 224 166, 268 152 L269 158 C225 173, 174 169, 140 162 Z"
+          fill="#1D1D1F"
+        />
+
+        {/* Chunky architectural block heel */}
+        <path
+          d="M88 134 L132 138 L121 195 L84 195 Z"
+          fill="url(#heelSide)"
+          stroke="#D4D4DC"
+          strokeWidth="1"
+        />
+        <path
+          d="M115 137 L132 138 L121 195 L110 195 Z"
+          fill="#DFDFE6"
+        />
+
+        {/* Main White Leather Ankle Boot Upper */}
+        <path
+          d="M95 36 C125 32, 156 30, 178 33 L182 95 C192 115, 228 128, 265 138 C274 141, 275 150, 267 153 C224 167, 174 163, 138 156 L88 135 C85 105, 89 65, 95 36 Z"
+          fill="url(#bootLeather)"
+          stroke="#E2E2E8"
+          strokeWidth="1.2"
+        />
+
+        {/* Subtle leather paneling & ankle crease details */}
+        <path
+          d="M150 32 C152 75, 148 115, 138 155"
+          stroke="#DCDCE2"
+          strokeWidth="1.3"
+          fill="none"
+        />
+        <path
+          d="M166 96 C176 105, 190 112, 206 118"
+          stroke="#D8D8E0"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M96 42 C125 38, 155 36, 177 39"
+          stroke="#E5E5EB"
+          strokeWidth="1.2"
+        />
+        {/* Soft volumetric highlight along vamp */}
+        <path
+          d="M174 102 C196 119, 226 130, 256 140"
+          stroke="#FFFFFF"
+          strokeWidth="3"
+          strokeLinecap="round"
+          opacity="0.9"
+        />
+        <path
+          d="M100 128 L142 152 L175 156 L138 142 Z"
+          fill="url(#bootShade)"
+        />
+      </g>
+    </svg>
+  </div>
+);
+
+const FlowerPurseVisual = () => (
+  <div className="relative w-full h-full flex items-center justify-center">
+    {/* Glossy Dark Espresso Leather Handbag overflowing with White Wildflowers / Baby's Breath */}
+    <svg
+      viewBox="0 0 320 250"
+      className="w-[275px] h-[225px] overflow-visible transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_14px_18px_rgba(0,0,0,0.3)]"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <radialGradient id="leatherBody" cx="42%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#6D3219" />
+          <stop offset="45%" stopColor="#451A09" />
+          <stop offset="100%" stopColor="#260C03" />
+        </radialGradient>
+        <linearGradient id="leatherHighlight" x1="95" y1="115" x2="220" y2="205" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#9A5334" stopOpacity="0.65" />
+          <stop offset="50%" stopColor="#5C2510" stopOpacity="0.1" />
+          <stop offset="100%" stopColor="#1E0902" stopOpacity="0.7" />
+        </linearGradient>
+      </defs>
+
+      {/* Lush Greenery Stems & Leaves overflowing the top of the purse */}
+      <g stroke="#2B5928" strokeWidth="2.5" strokeLinecap="round">
+        <path d="M135 120 C115 95, 85 75, 58 68" />
+        <path d="M145 118 C130 85, 110 55, 92 42" />
+        <path d="M160 116 C158 80, 155 48, 152 30" />
+        <path d="M174 118 C186 84, 205 55, 224 40" />
+        <path d="M185 122 C210 96, 236 78, 262 72" />
+        <path d="M122 122 C100 106, 75 98, 52 98" />
+        <path d="M196 122 C220 106, 244 98, 268 96" />
+      </g>
+
+      {/* Small botanical leaves */}
+      <g fill="#366B31">
+        <ellipse cx="95" cy="86" rx="10" ry="4" transform="rotate(-28 95 86)" />
+        <ellipse cx="122" cy="70" rx="10" ry="4" transform="rotate(-48 122 70)" />
+        <ellipse cx="195" cy="72" rx="10" ry="4" transform="rotate(42 195 72)" />
+        <ellipse cx="225" cy="88" rx="10" ry="4" transform="rotate(24 225 88)" />
+        <ellipse cx="158" cy="64" rx="9" ry="4" transform="rotate(-12 158 64)" />
+      </g>
+
+      {/* Delicate White Baby's Breath / Wildflower Clusters */}
+      {[
+        [56, 68], [68, 60], [48, 78], [76, 72],
+        [88, 44], [100, 38], [80, 54], [108, 48], [95, 62],
+        [135, 34], [150, 28], [164, 33], [142, 46], [158, 45], [174, 42],
+        [206, 38], [222, 42], [234, 52], [212, 54], [194, 52],
+        [248, 66], [264, 72], [272, 84], [252, 82], [238, 76],
+        [54, 96], [68, 92], [82, 102], [244, 102], [262, 96],
+        [118, 84], [140, 76], [178, 78], [202, 86],
+      ].map(([cx, cy], idx) => (
+        <g key={idx}>
+          <circle cx={cx} cy={cy} r="6.5" fill="#FFFFFF" />
+          <circle cx={cx + 4} cy={cy - 3} r="5" fill="#FDF9F3" />
+          <circle cx={cx - 4} cy={cy + 2} r="4.8" fill="#F7F3EB" />
+          <circle cx={cx} cy={cy} r="1.6" fill="#E8D27A" />
+        </g>
+      ))}
+
+      {/* Structured Top Leather Handles */}
+      <path
+        d="M126 118 C126 84, 194 84, 194 118"
+        stroke="#3A1406"
+        strokeWidth="8.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M126 118 C126 84, 194 84, 194 118"
+        stroke="#7A3B20"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Glossy Dark Brown Leather Handbag Body */}
+      <path
+        d="M104 114 C135 110, 185 110, 216 114 L232 182 C236 198, 222 208, 202 209 L118 209 C98 208, 84 198, 88 182 Z"
+        fill="url(#leatherBody)"
+        stroke="#1E0802"
+        strokeWidth="1.5"
+      />
+
+      {/* Vertical ruched leather pleats & glossy sheen */}
+      <path
+        d="M104 114 C135 110, 185 110, 216 114 L232 182 C236 198, 222 208, 202 209 L118 209 C98 208, 84 198, 88 182 Z"
+        fill="url(#leatherHighlight)"
+      />
+      <path
+        d="M132 116 C128 148, 126 178, 128 206"
+        stroke="#220A03"
+        strokeWidth="2.2"
+        opacity="0.75"
+      />
+      <path
+        d="M188 116 C192 148, 194 178, 192 206"
+        stroke="#220A03"
+        strokeWidth="2.2"
+        opacity="0.75"
+      />
+      {/* Specular leather gloss highlights */}
+      <path
+        d="M106 135 C102 155, 102 174, 108 190"
+        stroke="#B56C4B"
+        strokeWidth="3"
+        strokeLinecap="round"
+        opacity="0.55"
+      />
+      <path
+        d="M148 134 C146 154, 148 175, 152 192"
+        stroke="#A45B3B"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        opacity="0.45"
+      />
+      {/* Center metallic clasp */}
+      <rect
+        x="154"
+        y="122"
+        width="12"
+        height="15"
+        rx="3"
+        fill="#D4AF37"
+        stroke="#4A2E00"
+        strokeWidth="1"
+      />
+    </svg>
+  </div>
+);
+
+// Additional Page 2 Products when clicking the bottom-center arrow (→)
+const ExtraProductVisual = ({ type }) => {
+  if (type === 'sunglasses') {
+    return (
+      <div className="relative w-full h-full flex items-center justify-center">
+        <img
+          src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=85"
+          alt="Retro Cat-Eye Frames"
+          className="w-[215px] h-[200px] object-cover rounded-[45%] transition-transform duration-500 group-hover:scale-105"
+          style={{ clipPath: 'ellipse(48% 46% at 50% 50%)' }}
+        />
+      </div>
+    );
+  }
+  if (type === 'jacket') {
+    return (
+      <div className="relative w-full h-full flex items-center justify-center">
+        <img
+          src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=85"
+          alt="Cropped Moto Jacket"
+          className="w-[215px] h-[215px] object-cover rounded-[45%] transition-transform duration-500 group-hover:scale-105"
+          style={{ clipPath: 'ellipse(47% 48% at 50% 50%)' }}
+        />
+      </div>
+    );
+  }
+  return (
+    <div className="relative w-full h-full flex items-center justify-center">
+      <img
+        src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=600&q=85"
+        alt="Velvet Platform Heels"
+        className="w-[215px] h-[215px] object-cover rounded-[45%] transition-transform duration-500 group-hover:scale-105"
+        style={{ clipPath: 'ellipse(47% 48% at 50% 50%)' }}
+      />
+    </div>
+  );
+};
+
+// Product Catalog Data (Page 0 matches the exact screenshot items)
+const PRODUCT_PAGES = [
+  [
+    {
+      id: 'cool-outfit',
+      title: 'COOL OUTFIT',
+      price: 80,
+      category: 'SPECIAL SALE',
+      description: 'Asymmetric black long-sleeve crop top paired with relaxed parachute cargo pants.',
+      renderVisual: () => <CoolOutfitVisual />,
+    },
+    {
+      id: 'all-white-boots',
+      title: 'ALL WHITE BOOTS',
+      price: 100,
+      category: 'SPECIAL SALE',
+      description: 'Crisp matte-white vegan leather pointed ankle boots with architectural block heel.',
+      renderVisual: () => <AllWhiteBootsVisual />,
+    },
+    {
+      id: 'flower-purse',
+      title: 'FLOWER PURSE',
+      price: 50,
+      category: 'SPECIAL SALE',
+      description: 'Glossy espresso-brown structured top-handle bag styled for Boxing Day.',
+      renderVisual: () => <FlowerPurseVisual />,
+    },
+  ],
+  [
+    {
+      id: 'retro-shades',
+      title: 'Y2K SHIELD SHADES',
+      price: 45,
+      category: 'NEW ARRIVALS',
+      description: 'Wraparound silver-rim studio frames from the Boxing Day capsule.',
+      renderVisual: () => <ExtraProductVisual type="sunglasses" />,
+    },
+    {
+      id: 'cropped-moto',
+      title: 'NOIR MOTO JACKET',
+      price: 135,
+      category: 'NEW ARRIVALS',
+      description: 'Heavyweight cropped biker jacket with brushed silver hardware.',
+      renderVisual: () => <ExtraProductVisual type="jacket" />,
+    },
+    {
+      id: 'cobalt-heels',
+      title: 'COBALT PARTY HEELS',
+      price: 95,
+      category: 'SPECIAL SALE',
+      description: 'Satin-finish pointed pumps for late-night holiday celebrations.',
+      renderVisual: () => <ExtraProductVisual type="heels" />,
+    },
+  ],
+];
+
+export default function App() {
+  const [activeNav, setActiveNav] = useState('SPECIAL SALE');
+  const [pageIndex, setPageIndex] = useState(0);
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [contactOpen, setContactOpen] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+
+  // Dynamically load Google Fonts ('Great Vibes' & 'Plus Jakarta Sans')
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.href =
+      'https://fonts.googleapis.com/css2?family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
+  const allProducts = PRODUCT_PAGES.flat();
+  const displayedProducts = searchQuery.trim()
+    ? allProducts.filter(
+        (item) =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : PRODUCT_PAGES[pageIndex];
+
+  const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const handleAddToCart = (product) => {
+    setCart((prev) => {
+      const existing = prev.find((i) => i.id === product.id);
+      if (existing) {
+        return prev.map((i) =>
+          i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+    setToastMessage(`Added "${product.title}" ($${product.price}) to your bag`);
+  };
+
+  const handleUpdateQty = (id, delta) => {
+    setCart((prev) =>
+      prev
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity + delta } : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
+
+  const handleNextSlide = () => {
+    setSearchQuery('');
+    setPageIndex((prev) => (prev + 1) % PRODUCT_PAGES.length);
+  };
+
+  const handleNavClick = (navName) => {
+    setActiveNav(navName);
+    if (navName === 'CONTACT') {
+      setContactSubmitted(false);
+      setContactOpen(true);
+    } else if (navName === 'NEW ARRIVALS') {
+      setPageIndex(1);
+    } else {
+      setPageIndex(0);
+    }
+  };
+
+  return (
+    <ThemeProvider theme={coolClothesTheme}>
+      <CssBaseline />
+
+      {/* Full-Bleed Vibrant Vermilion Orange-Red Landing Page */}
+      <div
+        className="min-h-screen w-full flex flex-col justify-between overflow-x-hidden select-none"
+        style={{
+          backgroundColor: '#F43504',
+          color: '#FDF5EE',
+        }}
+      >
+        {/* ================= TOP NAVIGATION BAR ================= */}
+        <header className="w-full max-w-[1380px] mx-auto px-6 sm:px-10 md:px-14 pt-6 pb-2">
+          <nav className="grid grid-cols-3 items-center">
+            {/* Left Nav: Search + HOME + NEW ARRIVALS */}
+            <div className="flex items-center space-x-4 sm:space-x-7 md:space-x-9">
+              <IconButton
+                onClick={() => setSearchOpen((prev) => !prev)}
+                size="small"
+                aria-label="Search collection"
+                sx={{
+                  color: '#FDF5EE',
+                  padding: '4px',
+                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.12)' },
+                }}
+              >
+                <SearchOutlined sx={{ fontSize: 18 }} />
+              </IconButton>
+
+              {['HOME', 'NEW ARRIVALS'].map((label) => {
+                const isActive = activeNav === label;
+                return (
+                  <button
+                    key={label}
+                    onClick={() => handleNavClick(label)}
+                    className={`hidden sm:inline-block bg-transparent border-0 p-0 cursor-pointer text-[11px] tracking-[0.09em] uppercase transition-opacity duration-200 ${
+                      isActive
+                        ? 'text-[#FDF5EE] font-semibold underline underline-offset-4 decoration-[1.5px]'
+                        : 'text-[#FDF5EE]/90 font-normal hover:text-[#FDF5EE]'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Center Brand Logo: Cool Clothes */}
+            <div className="flex justify-center">
+              <button
+                onClick={() => {
+                  setActiveNav('SPECIAL SALE');
+                  setPageIndex(0);
+                  setSearchQuery('');
+                }}
+                className="bg-transparent border-0 p-0 cursor-pointer text-[#FDF5EE] hover:opacity-90 transition-opacity"
+                style={{
+                  fontFamily: '"Great Vibes", cursive',
+                  fontSize: 'clamp(28px, 3.1vw, 36px)',
+                  lineHeight: 1.1,
+                  fontWeight: 400,
+                }}
+              >
+                Cool Clothes
+              </button>
+            </div>
+
+            {/* Right Nav: SPECIAL SALE + CONTACT + Shopping Bag */}
+            <div className="flex items-center justify-end space-x-4 sm:space-x-7 md:space-x-9">
+              {['SPECIAL SALE', 'CONTACT'].map((label) => {
+                const isActive = activeNav === label;
+                return (
+                  <button
+                    key={label}
+                    onClick={() => handleNavClick(label)}
+                    className={`hidden sm:inline-block bg-transparent border-0 p-0 cursor-pointer text-[11px] tracking-[0.09em] uppercase transition-opacity duration-200 ${
+                      isActive
+                        ? 'text-[#FDF5EE] font-semibold underline underline-offset-[5px] decoration-[1.5px]'
+                        : 'text-[#FDF5EE]/90 font-normal hover:text-[#FDF5EE]'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+
+              <IconButton
+                onClick={() => setCartOpen(true)}
+                size="small"
+                aria-label="Open shopping bag"
+                sx={{
+                  color: '#FDF5EE',
+                  padding: '4px',
+                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.12)' },
+                }}
+              >
+                <Badge
+                  badgeContent={totalCartItems}
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      backgroundColor: '#02733E',
+                      color: '#FDF5EE',
+                      fontSize: '10px',
+                      height: '16px',
+                      minWidth: '16px',
+                      border: '1px solid #FDF5EE',
+                    },
+                  }}
+                >
+                  <ShoppingBagOutlined sx={{ fontSize: 18 }} />
+                </Badge>
+              </IconButton>
+            </div>
+          </nav>
+
+          {/* Expandable Sleek Search Bar */}
+          {searchOpen && (
+            <div className="mt-4 max-w-md mx-auto animate-fadeIn">
+              <TextField
+                fullWidth
+                size="small"
+                autoFocus
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search Boxing Day highlights (e.g. Boots, Purse, Outfit)..."
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchOutlined sx={{ color: '#FDF5EE', fontSize: 18 }} />
+                    </InputAdornment>
+                  ),
+                  endAdornment: searchQuery && (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        onClick={() => setSearchQuery('')}
+                        sx={{ color: '#FDF5EE' }}
+                      >
+                        <CloseOutlined sx={{ fontSize: 16 }} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  sx: {
+                    color: '#FDF5EE',
+                    backgroundColor: 'rgba(0,0,0,0.14)',
+                    borderRadius: '999px',
+                    fontSize: '13px',
+                    '& fieldset': { borderColor: 'rgba(253,245,238,0.45)' },
+                    '&:hover fieldset': { borderColor: '#FDF5EE' },
+                    '&.Mui-focused fieldset': { borderColor: '#FDF5EE' },
+                  },
+                }}
+              />
+            </div>
+          )}
+        </header>
+
+        {/* ================= MAIN HERO & PRODUCT SHOWCASE ================= */}
+        <main className="flex-1 w-full max-w-[1260px] mx-auto px-6 sm:px-10 md:px-14 flex flex-col justify-center py-4 md:py-6">
+          {/* Hero Header Row with Floating Left "New" Sticker & Right Smiley Sticker */}
+          <div className="relative flex items-center justify-between w-full mb-8 md:mb-12">
+            {/* Upper Left Royal Blue "New" Sticker */}
+            <div className="flex-shrink-0 pl-1 sm:pl-4 md:pl-6 -mt-6 sm:-mt-8">
+              <NewStickerBadge />
+            </div>
+
+            {/* Center Hero Heading & Subtitle */}
+            <div className="text-center px-2 max-w-xl mx-auto">
+              <h1
+                className="text-[#FDF5EE] font-light tracking-[-0.015em] mb-2.5"
+                style={{
+                  fontSize: 'clamp(30px, 4.1vw, 46px)',
+                  lineHeight: 1.15,
+                }}
+              >
+                Boxing Sale Highlights
+              </h1>
+              <p className="text-[#FDF5EE]/90 text-[12.5px] sm:text-[13.5px] font-light leading-[1.45] tracking-[0.01em]">
+                A lot of style! Discover “Boxing Day”
+                <br />
+                in the entire new collection.
+              </p>
+            </div>
+
+            {/* Upper Right Retro Yellow Smiley Sticker */}
+            <div className="flex-shrink-0 pr-1 sm:pr-4 md:pr-6 -mt-6 sm:-mt-8">
+              <RetroSmileySticker />
+            </div>
+          </div>
+
+          {/* Three-Column Product Showcase */}
+          {displayedProducts.length === 0 ? (
+            <div className="text-center py-14">
+              <p className="text-[#FDF5EE] text-base mb-3">
+                No Boxing Day pieces matched “{searchQuery}”.
+              </p>
+              <Button
+                variant="outlined"
+                onClick={() => setSearchQuery('')}
+                sx={{
+                  color: '#FDF5EE',
+                  borderColor: '#FDF5EE',
+                  fontSize: '11px',
+                  letterSpacing: '0.1em',
+                }}
+              >
+                Reset Search
+              </Button>
+            </div>
+          ) : (
+            <section
+              aria-label="Featured Boxing Day Products"
+              className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 items-start justify-items-center mt-2"
+            >
+              {displayedProducts.map((product) => (
+                <article
+                  key={product.id}
+                  className="group flex flex-col items-center text-center w-full max-w-[310px]"
+                >
+                  {/* Deep Forest Green Horizontal Oval Backdrop (#02733E) with 1px dark border */}
+                  <div className="relative flex items-center justify-center w-[265px] sm:w-[280px] h-[172px] sm:h-[182px] mb-5">
+                    <div
+                      className="w-full h-full rounded-[50%] transition-transform duration-300 group-hover:scale-[1.02]"
+                      style={{
+                        backgroundColor: '#02733E',
+                        border: '1px solid #0A2E1A',
+                      }}
+                    />
+                    {/* Cutout Product Subject overflowing slightly outside the green oval */}
+                    <div className="absolute inset-0 flex items-center justify-center overflow-visible">
+                      {product.renderVisual()}
+                    </div>
+                  </div>
+
+                  {/* Product Title */}
+                  <h2 className="text-[#FDF5EE] text-[11.5px] font-medium tracking-[0.09em] uppercase mb-1">
+                    {product.title}
+                  </h2>
+
+                  {/* Product Price */}
+                  <p className="text-[#FDF5EE] text-[18px] font-normal tracking-[0.01em] mb-2">
+                    ${product.price}
+                  </p>
+
+                  {/* Interactive Underlined ADD TO CART Action */}
+                  <Button
+                    onClick={() => handleAddToCart(product)}
+                    disableRipple
+                    sx={{
+                      minWidth: 'auto',
+                      padding: '2px 4px',
+                      color: '#FDF5EE',
+                      fontSize: '10.5px',
+                      fontWeight: 500,
+                      letterSpacing: '0.09em',
+                      textDecoration: 'underline',
+                      textUnderlineOffset: '4px',
+                      textDecorationThickness: '1px',
+                      backgroundColor: 'transparent',
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                        opacity: 0.78,
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    ADD TO CART
+                  </Button>
+                </article>
+              ))}
+            </section>
+          )}
+        </main>
+
+        {/* ================= BOTTOM FOOTER BAR ================= */}
+        <footer className="w-full max-w-[1380px] mx-auto px-6 sm:px-10 md:px-14 pb-5 pt-2 flex items-end justify-between">
+          {/* Bottom-Left Instagram Handle */}
+          <a
+            href="#instagram"
+            onClick={(e) => {
+              e.preventDefault();
+              setToastMessage('Following @coolclot on Instagram!');
+            }}
+            className="text-[#FDF5EE]/90 hover:text-[#FDF5EE] text-[10.5px] tracking-[0.03em] no-underline transition-opacity"
+          >
+            ig@coolclot
+          </a>
+
+          {/* Bottom-Center Thin Sleek Right Arrow (→) to cycle collection */}
+          <button
+            onClick={handleNextSlide}
+            aria-label="View next Boxing Day highlights"
+            title="Next Boxing Day highlights"
+            className="group bg-transparent border-0 p-2 cursor-pointer text-[#FDF5EE] flex items-center justify-center transition-transform duration-300 hover:translate-x-1.5 focus:outline-none"
+          >
+            <svg
+              width="28"
+              height="16"
+              viewBox="0 0 28 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="1"
+                y1="8"
+                x2="25"
+                y2="8"
+                stroke="#FDF5EE"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+              />
+              <polyline
+                points="19,2.5 25.5,8 19,13.5"
+                stroke="#FDF5EE"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+          </button>
+
+          {/* Bottom-Right Cream Speech Bubble "SALE" Sticker */}
+          <div className="-mb-1">
+            <SaleSpeechBubble
+              onClick={() => {
+                setPageIndex(0);
+                setActiveNav('SPECIAL SALE');
+                setToastMessage('Boxing Day Special Sale: Up to 40% Off Selected Pieces!');
+              }}
+            />
+          </div>
+        </footer>
+      </div>
+
+      {/* ================= INTERACTIVE SHOPPING BAG DRAWER (MUI) ================= */}
+      <Drawer
+        anchor="right"
+        open={cartOpen}
+        onClose={() => {
+          setCartOpen(false);
+          setCheckoutSuccess(false);
+        }}
+        PaperProps={{
+          sx: {
+            width: { xs: '100%', sm: 390 },
+            backgroundColor: '#FDF5EE',
+            color: '#1C1917',
+            p: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          },
+        }}
+      >
+        <div>
+          <div className="flex items-center justify-between pb-3 border-b border-stone-300">
+            <div className="flex items-center gap-2">
+              <ShoppingBagOutlined sx={{ color: '#F43504', fontSize: 20 }} />
+              <span className="text-xs font-semibold tracking-[0.12em] uppercase text-stone-900">
+                Your Boxing Day Bag ({totalCartItems})
+              </span>
+            </div>
+            <IconButton size="small" onClick={() => setCartOpen(false)}>
+              <CloseOutlined fontSize="small" />
+            </IconButton>
+          </div>
+
+          {checkoutSuccess ? (
+            <div className="py-16 text-center space-y-3">
+              <CheckCircleOutline sx={{ fontSize: 48, color: '#02733E' }} />
+              <h3 className="text-lg font-semibold text-stone-900">
+                Order Confirmed!
+              </h3>
+              <p className="text-xs text-stone-600 max-w-xs mx-auto leading-relaxed">
+                Thank you for shopping the Cool Clothes Boxing Day Sale. Your pieces are being prepped for dispatch.
+              </p>
+            </div>
+          ) : cart.length === 0 ? (
+            <div className="py-16 text-center space-y-3">
+              <p className="text-sm text-stone-600">Your shopping bag is currently empty.</p>
+              <Button
+                variant="contained"
+                onClick={() => setCartOpen(false)}
+                sx={{
+                  backgroundColor: '#F43504',
+                  color: '#FDF5EE',
+                  fontSize: '11px',
+                  letterSpacing: '0.1em',
+                  '&:hover': { backgroundColor: '#D62C00' },
+                }}
+              >
+                Explore Highlights
+              </Button>
+            </div>
+          ) : (
+            <div className="divide-y divide-stone-200 mt-2 max-h-[62vh] overflow-y-auto pr-1">
+              {cart.map((item) => (
+                <div key={item.id} className="py-4 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-[#02733E] flex items-center justify-center text-[#FDF5EE] text-xs font-semibold shrink-0">
+                      ${item.price}
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-semibold tracking-wider uppercase text-stone-900">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-stone-500 mt-0.5">
+                        ${item.price} each
+                      </p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleUpdateQty(item.id, -1)}
+                          sx={{ border: '1px solid #D6D3D1', p: '2px' }}
+                        >
+                          <RemoveOutlined sx={{ fontSize: 13 }} />
+                        </IconButton>
+                        <span className="text-xs font-medium w-4 text-center">
+                          {item.quantity}
+                        </span>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleUpdateQty(item.id, 1)}
+                          sx={{ border: '1px solid #D6D3D1', p: '2px' }}
+                        >
+                          <AddOutlined sx={{ fontSize: 13 }} />
+                        </IconButton>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-sm font-semibold text-stone-900">
+                      ${item.price * item.quantity}
+                    </span>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleUpdateQty(item.id, -item.quantity)}
+                      aria-label="Remove item"
+                    >
+                      <DeleteOutline sx={{ fontSize: 16, color: '#78716C' }} />
+                    </IconButton>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {cart.length > 0 && !checkoutSuccess && (
+          <div className="pt-4 border-t border-stone-300 space-y-3">
+            <div className="flex items-center justify-between text-xs text-stone-600">
+              <span>Boxing Day Express Shipping</span>
+              <span className="font-medium text-[#02733E]">FREE</span>
+            </div>
+            <div className="flex items-center justify-between text-sm font-semibold text-stone-900">
+              <span>Subtotal</span>
+              <span>${cartSubtotal}</span>
+            </div>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => {
+                setCart([]);
+                setCheckoutSuccess(true);
+              }}
+              sx={{
+                backgroundColor: '#F43504',
+                color: '#FDF5EE',
+                py: 1.3,
+                fontSize: '11.5px',
+                fontWeight: 600,
+                letterSpacing: '0.12em',
+                '&:hover': { backgroundColor: '#D62C00' },
+              }}
+            >
+              Checkout Now — ${cartSubtotal}
+            </Button>
+          </div>
+        )}
+      </Drawer>
+
+      {/* ================= CONTACT MODAL (MUI DIALOG) ================= */}
+      <Dialog
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        PaperProps={{
+          sx: {
+            backgroundColor: '#FDF5EE',
+            color: '#1C1917',
+            borderRadius: 2,
+            maxWidth: 400,
+            width: '100%',
+            p: 1,
+          },
+        }}
+      >
+        <DialogContent>
+          <div className="flex items-center justify-between mb-2">
+            <span
+              style={{ fontFamily: '"Great Vibes", cursive', fontSize: '28px' }}
+              className="text-[#F43504]"
+            >
+              Cool Clothes
+            </span>
+            <IconButton size="small" onClick={() => setContactOpen(false)}>
+              <CloseOutlined fontSize="small" />
+            </IconButton>
+          </div>
+          <Divider sx={{ mb: 2 }} />
+          {contactSubmitted ? (
+            <div className="py-6 text-center space-y-2">
+              <CheckCircleOutline sx={{ color: '#02733E', fontSize: 38 }} />
+              <p className="text-sm font-semibold">Message Received!</p>
+              <p className="text-xs text-stone-600">
+                Our Boxing Day stylist concierge will reply shortly.
+              </p>
+            </div>
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setContactSubmitted(true);
+              }}
+              className="space-y-3"
+            >
+              <p className="text-xs text-stone-600">
+                Questions about sizing or Boxing Day express delivery? Drop us a note.
+              </p>
+              <TextField
+                fullWidth
+                required
+                size="small"
+                label="Your Email"
+                type="email"
+                InputLabelProps={{ sx: { fontSize: '12px' } }}
+              />
+              <TextField
+                fullWidth
+                required
+                size="small"
+                multiline
+                rows={3}
+                label="Message"
+                InputLabelProps={{ sx: { fontSize: '12px' } }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  backgroundColor: '#02733E',
+                  color: '#FDF5EE',
+                  fontSize: '11px',
+                  letterSpacing: '0.1em',
+                  py: 1.1,
+                  '&:hover': { backgroundColor: '#01582F' },
+                }}
+              >
+                Send Message
+              </Button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* ================= TOAST NOTIFICATION (MUI SNACKBAR) ================= */}
+      <Snackbar
+        open={Boolean(toastMessage)}
+        autoHideDuration={2800}
+        onClose={() => setToastMessage('')}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setToastMessage('')}
+          severity="success"
+          sx={{
+            backgroundColor: '#02733E',
+            color: '#FDF5EE',
+            border: '1px solid #FDF5EE',
+            fontSize: '12px',
+            '& .MuiAlert-icon': { color: '#FFD600' },
+          }}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
+    </ThemeProvider>
+  );
+}
