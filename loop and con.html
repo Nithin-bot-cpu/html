@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Practice Programs</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: darkblue;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px gray;
+        }
+
+        input {
+            padding: 10px;
+            width: 65%;
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: darkblue;
+        }
+
+        p {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>JavaScript Practice Programs</h1>
+
+<div class="container">
+
+    <!-- 1. String Function -->
+    <div class="box">
+        <h3>1. Count Vowels</h3>
+        <input type="text" id="vowelInput" placeholder="Enter a string">
+        <button onclick="countVowels()">Submit</button>
+        <p id="vowelResult"></p>
+    </div>
+
+    <!-- 2. Reverse Every Word -->
+    <div class="box">
+        <h3>2. Reverse Every Word</h3>
+        <input type="text" id="reverseInput" placeholder="Enter a sentence">
+        <button onclick="reverseWords()">Submit</button>
+        <p id="reverseResult"></p>
+    </div>
+
+    <!-- 3. Armstrong Number -->
+    <div class="box">
+        <h3>3. Armstrong Number</h3>
+        <input type="number" id="armstrongInput" placeholder="Enter a number">
+        <button onclick="checkArmstrong()">Submit</button>
+        <p id="armstrongResult"></p>
+    </div>
+
+    <!-- 4. Random Even Number -->
+    <div class="box">
+        <h3>4. Random Even Number (50 - 100)</h3>
+        <button onclick="randomEven()">Generate</button>
+        <p id="randomResult"></p>
+    </div>
+
+    <!-- 5. Remove Duplicates -->
+    <div class="box">
+        <h3>5. Remove Duplicate Values (Array)</h3>
+        <input type="text" id="arrayInput" placeholder="Example: 1,2,2,3,4,4">
+        <button onclick="removeDuplicates()">Submit</button>
+        <p id="arrayResult"></p>
+    </div>
+
+    <!-- 6. Common Elements -->
+    <div class="box">
+        <h3>6. Common Elements (Set)</h3>
+        <input type="text" id="array1" placeholder="First array: 1,2,3,4">
+        <input type="text" id="array2" placeholder="Second array: 2,3,5,6">
+        <button onclick="commonElements()">Submit</button>
+        <p id="commonResult"></p>
+    </div>
+
+    <!-- 7. Word Frequency -->
+    <div class="box">
+        <h3>7. Word Frequency (Map)</h3>
+        <input type="text" id="sentenceInput" placeholder="Enter a sentence">
+        <button onclick="wordFrequency()">Submit</button>
+        <p id="frequencyResult"></p>
+    </div>
+
+    <!-- 8. Multiplication Table -->
+    <div class="box">
+        <h3>8. Multiplication Table</h3>
+        <input type="number" id="tableInput" placeholder="Enter a number">
+        <button onclick="multiplicationTable()">Submit</button>
+        <p id="tableResult"></p>
+    </div>
+
+    <!-- 9. Grade Calculator -->
+    <div class="box">
+        <h3>9. Grade Calculator</h3>
+        <input type="number" id="marksInput" placeholder="Enter marks (0-100)">
+        <button onclick="calculateGrade()">Submit</button>
+        <p id="gradeResult"></p>
+    </div>
+
+</div>
+
+<script>
+
+// 1. Count Vowels
+function countVowels() {
+    let str = document.getElementById("vowelInput").value;
+    let count = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        let ch = str[i].toLowerCase();
+
+        if (ch === "a" || ch === "e" || ch === "i" ||
+            ch === "o" || ch === "u") {
+            count++;
+        }
+    }
+
+    document.getElementById("vowelResult").innerHTML =
+        "Number of vowels: " + count;
+}
+
+
+// 2. Reverse Every Word
+function reverseWords() {
+    let str = document.getElementById("reverseInput").value;
+
+    let words = str.split(" ");
+
+    let result = words.map(function(word) {
+        return word.split("").reverse().join("");
+    });
+
+    document.getElementById("reverseResult").innerHTML =
+        result.join(" ");
+}
+
+
+// 3. Armstrong Number
+function checkArmstrong() {
+    let num = Number(document.getElementById("armstrongInput").value);
+    let temp = num;
+    let sum = 0;
+    let digits = String(num).length;
+
+    if (!Number.isInteger(num) || num < 0) {
+        document.getElementById("armstrongResult").innerHTML =
+            "Enter a valid non-negative integer";
+        return;
+    }
+
+    while (temp > 0) {
+        let digit = temp % 10;
+        sum += Math.pow(digit, digits);
+        temp = Math.floor(temp / 10);
+    }
+
+    if (sum === num) {
+        document.getElementById("armstrongResult").innerHTML =
+            num + " is an Armstrong Number";
+    } else {
+        document.getElementById("armstrongResult").innerHTML =
+            num + " is not an Armstrong Number";
+    }
+}
+
+
+// 4. Generate Random Even Number
+function randomEven() {
+    let num;
+
+    do {
+        num = Math.floor(Math.random() * 51) + 50;
+    } while (num % 2 !== 0);
+
+    document.getElementById("randomResult").innerHTML =
+        "Random even number: " + num;
+}
+
+
+// 5. Remove Duplicates Without Set
+function removeDuplicates() {
+    let arr = document.getElementById("arrayInput").value
+        .split(",")
+        .map(Number);
+
+    let unique = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        if (!unique.includes(arr[i])) {
+            unique.push(arr[i]);
+        }
+    }
+
+    document.getElementById("arrayResult").innerHTML =
+        "Unique Array: " + unique.join(", ");
+}
+
+
+// 6. Find Common Elements Using Set
+function commonElements() {
+    let arr1 = document.getElementById("array1").value
+        .split(",").map(Number);
+
+    let arr2 = document.getElementById("array2").value
+        .split(",").map(Number);
+
+    let set1 = new Set(arr1);
+    let set2 = new Set(arr2);
+
+    let result = [];
+
+    for (let value of set1) {
+        if (set2.has(value)) {
+            result.push(value);
+        }
+    }
+
+    document.getElementById("commonResult").innerHTML =
+        "Common Elements: " + result.join(", ");
+}
+
+
+// 7. Word Frequency Using Map
+function wordFrequency() {
+    let sentence = document.getElementById("sentenceInput").value
+        .toLowerCase();
+
+    let words = sentence.trim().split(/\s+/);
+    let map = new Map();
+
+    for (let word of words) {
+        if (word === "") continue;
+
+        if (map.has(word)) {
+            map.set(word, map.get(word) + 1);
+        } else {
+            map.set(word, 1);
+        }
+    }
+
+    let result = "";
+
+    for (let [word, count] of map) {
+        result += word + " : " + count + "<br>";
+    }
+
+    document.getElementById("frequencyResult").innerHTML = result;
+}
+
+
+// 8. Multiplication Table Using One Loop
+function multiplicationTable() {
+    let num = Number(document.getElementById("tableInput").value);
+    let result = "";
+
+    for (let i = 1; i <= 10; i++) {
+        result += num + " x " + i + " = " + (num * i) + "<br>";
+    }
+
+    document.getElementById("tableResult").innerHTML = result;
+}
+
+
+// 9. Grade Calculator
+function calculateGrade() {
+    let marks = Number(document.getElementById("marksInput").value);
+    let grade;
+
+    if (marks < 0 || marks > 100 ||
+        document.getElementById("marksInput").value === "") {
+        document.getElementById("gradeResult").innerHTML =
+            "Enter valid marks between 0 and 100";
+        return;
+    }
+
+    if (marks >= 90) {
+        grade = "A";
+    } else if (marks >= 80) {
+        grade = "B";
+    } else if (marks >= 70) {
+        grade = "C";
+    } else if (marks >= 60) {
+        grade = "D";
+    } else {
+        grade = "Fail";
+    }
+
+    document.getElementById("gradeResult").innerHTML =
+        "Your Grade: " + grade;
+}
+
+</script>
+
+</body>
+</html>
